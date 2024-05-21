@@ -66,17 +66,17 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(18, 48);
+            this.webBrowser1.Location = new System.Drawing.Point(419, 48);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(770, 257);
+            this.webBrowser1.Size = new System.Drawing.Size(369, 285);
             this.webBrowser1.TabIndex = 4;
             // 
             // flowLayoutPanelImages
             // 
-            this.flowLayoutPanelImages.Location = new System.Drawing.Point(18, 311);
+            this.flowLayoutPanelImages.Location = new System.Drawing.Point(18, 48);
             this.flowLayoutPanelImages.Name = "flowLayoutPanelImages";
-            this.flowLayoutPanelImages.Size = new System.Drawing.Size(770, 33);
+            this.flowLayoutPanelImages.Size = new System.Drawing.Size(382, 285);
             this.flowLayoutPanelImages.TabIndex = 5;
             // 
             // EmailForm

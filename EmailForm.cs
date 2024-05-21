@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Lab04Bai7.LoiMoiDiAn;
 using MailKit.Net.Smtp;
+using System.IO;
 
 
 namespace Lab04Bai7
@@ -34,17 +35,19 @@ namespace Lab04Bai7
             flowLayoutPanelImages.Controls.Clear();
 
             // Add each image to the FlowLayoutPanel
-            foreach (var image in email.Images)
+            string imagesDirectory = @"D:\repositories\Lab04Bai7\Lab04Bai7\obj"; // Replace with your directory
+            foreach (var imageFile in Directory.GetFiles(imagesDirectory))
             {
                 PictureBox pictureBox = new PictureBox
                 {
-                    Image = image,
+                    Image = Image.FromFile(imageFile),
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Width = 100,
                     Height = 100
                 };
                 flowLayoutPanelImages.Controls.Add(pictureBox);
             }
+
         }
 
         private async void btnReply_Click(object sender, EventArgs e)
