@@ -27,6 +27,14 @@ namespace Lab04Bai7
         {
             get { return pictureBox1.Image; }
         }
+        public string GiaMonAn
+        {
+            get { return label5.Text; }
+        }
+        public string DiaChi
+        {
+            get { return label6.Text; }
+        }
 
         public void Settenmonan(string s)
         {

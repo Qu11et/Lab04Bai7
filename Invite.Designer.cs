@@ -58,6 +58,8 @@
             this.receiverTxt.Name = "receiverTxt";
             this.receiverTxt.Size = new System.Drawing.Size(325, 22);
             this.receiverTxt.TabIndex = 2;
+            this.receiverTxt.Text = "lekhauhuutai@gmail.com";
+            this.receiverTxt.TextChanged += new System.EventHandler(this.receiverTxt_TextChanged);
             // 
             // addBtn
             // 

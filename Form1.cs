@@ -8,6 +8,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MailKit.Net.Imap;
+using MailKit.Search;
+using MailKit;
+using MimeKit;
 using Newtonsoft.Json;
 
 namespace Lab04Bai7
@@ -303,18 +307,52 @@ namespace Lab04Bai7
 
         private void notifyBtn_Click(object sender, EventArgs e)
         {
-            //string imapServer = "imap.example.com"; // replace with your IMAP server
-            //int imapPort = 993; // replace with your IMAP port
-            //bool imapSsl = true; // replace with your IMAP SSL preference
-            //string email = "example@example.com"; // replace with your email
-            //string password = "password"; // replace with your password
-
-            //MailRepository mailRepository = new MailRepository(imapServer, imapPort, imapSsl, email, password); // Create an instance of MailRepository
-            // Rest of your code...
-            //OpenCompose(mailRepository);
-            SignIn signIn = new SignIn();
-            signIn.ShowDialog();
+            LoiMoiDiAn loimoidian = new LoiMoiDiAn();
+            loimoidian.ShowDialog();
             this.Close();
+        }
+
+        public static List<MimeMessage> invitations = new List<MimeMessage>();
+        private async void Form1_Load(object sender, EventArgs e)
+        {
+            var email = EmailSetting.username;
+            var password = EmailSetting.password;
+
+            using (var client = new ImapClient())
+            {
+                try
+                {
+                    await client.ConnectAsync("imap.gmail.com", 993, true);
+                    await client.AuthenticateAsync(email, password);
+
+                    await client.Inbox.OpenAsync(FolderAccess.ReadOnly);
+                    var query = SearchQuery.SubjectContains("Homnayangi");
+                    var uids = await client.Inbox.SearchAsync(query);
+
+                    invitations.Clear();
+                    foreach (var uid in uids)
+                    {
+                        var message = await client.Inbox.GetMessageAsync(uid);
+                        var body = message.HtmlBody; // Extract the body of the email
+                        var emailSender = message.From.Mailboxes.First().Address; // Extract the sender of the email
+                        invitations.Add(message);
+                    }
+
+                    notifyBtn.Text = $"You have {invitations.Count} invitations.";
+                    //lstNotifications.Items.Clear();
+                    //foreach (var invitation in invitations)
+                    //{
+                    //    var from = invitation.From.Mailboxes.First();
+                    //    lstNotifications.Items.Add($"{from.Name} <{from.Address}> - {invitation.Subject}");
+                    //}
+
+                    await client.DisconnectAsync(true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
+            }
         }
     }
 }

@@ -18,9 +18,13 @@ namespace Lab04Bai7
         }
 
         public static string username;
+        public static string password;
+        public static string nickname;
         private void saveBtn_Click(object sender, EventArgs e)
         {
             username = usernameTxt.Text;
+            password = passwordTxt.Text;
+            nickname = nicknameTxt.Text;
             this.Close();
         }
     }

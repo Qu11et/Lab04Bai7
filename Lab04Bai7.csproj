@@ -104,6 +104,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmailForm.Designer.cs">
+      <DependentUpon>EmailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EmailSetting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,25 +140,18 @@
     <Compile Include="Invite.Designer.cs">
       <DependentUpon>Invite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Loading.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Loading.Designer.cs">
-      <DependentUpon>Loading.cs</DependentUpon>
-    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="MailReceive.cs">
+    <Compile Include="LoiMoiDiAn.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MailReceive.Designer.cs">
-      <DependentUpon>MailReceive.cs</DependentUpon>
+    <Compile Include="LoiMoiDiAn.Designer.cs">
+      <DependentUpon>LoiMoiDiAn.cs</DependentUpon>
     </Compile>
-    <Compile Include="MailRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sign up.cs">
@@ -161,18 +160,15 @@
     <Compile Include="Sign up.Designer.cs">
       <DependentUpon>Sign up.cs</DependentUpon>
     </Compile>
-    <Compile Include="SignIn.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SignIn.Designer.cs">
-      <DependentUpon>SignIn.cs</DependentUpon>
-    </Compile>
     <Compile Include="Themmonan.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Themmonan.Designer.cs">
       <DependentUpon>Themmonan.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="EmailForm.resx">
+      <DependentUpon>EmailForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EmailSetting.resx">
       <DependentUpon>EmailSetting.cs</DependentUpon>
     </EmbeddedResource>
@@ -191,8 +187,8 @@
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MailReceive.resx">
-      <DependentUpon>MailReceive.cs</DependentUpon>
+    <EmbeddedResource Include="LoiMoiDiAn.resx">
+      <DependentUpon>LoiMoiDiAn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -202,12 +198,10 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Sign up.resx">
       <DependentUpon>Sign up.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SignIn.resx">
-      <DependentUpon>SignIn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Themmonan.resx">
       <DependentUpon>Themmonan.cs</DependentUpon>
@@ -225,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\minimalist-style-hand-painted-liquid-background-free-vector.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

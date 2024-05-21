@@ -8,12 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
-using System.Net.Mail;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 using System.Runtime.InteropServices;
+using MimeKit;
+using MimeKit.Text;
+using MimeKit.Utils;
+using MailKit.Net.Smtp;
+using Application = System.Windows.Forms.Application;
+using System.Web;
+using Lab04Bai7;
 using System.IO;
+
+
 
 namespace Lab04Bai7
 {
@@ -25,116 +33,73 @@ namespace Lab04Bai7
             flowLayoutPanel1.Controls.Add(selectedControl);
         }
 
+
+
         private void sendBtn_Click(object sender, EventArgs e)
         {
-            string from, to, pass;
+            string from, to, pass, content;
             from = EmailSetting.username;
             to = receiverTxt.Text.Trim();
-            pass = "ibeppdtnqthusekh";
+            pass = EmailSetting.password;
+            //content = txtContent.Text;
 
             // Get the selected control from the flowLayoutPanel1
             Hienthimonan selectedControl = (Hienthimonan)flowLayoutPanel1.Controls[0];
 
             // Get the name of the dish from the selected control
             string monAn = selectedControl.MonAnName;
-            System.Drawing.Image hinhAnh = selectedControl.MonAnImage;
+            //Image hinhAnh = selectedControl.MonAnImage;
 
-            // Convert the image to a base64 string
-            string base64Image = "";
-            using (MemoryStream ms = new MemoryStream())
-            {
-                hinhAnh.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                byte[] imageBytes = ms.ToArray();
-                base64Image = Convert.ToBase64String(imageBytes);
-            }
+            // Xây dựng html cho email body
+            System.Drawing.Image image = selectedControl.MonAnImage;
+            string Name = selectedControl.MonAnName;
+            string Gia = selectedControl.GiaMonAn;
+            string DiaChi = selectedControl.DiaChi;
+            //Lư ảnh vào thư mục tạm
+            string tempFilePath = Path.Combine(Path.GetTempPath(), "AnhMonAn.png");
+            image.Save(tempFilePath, System.Drawing.Imaging.ImageFormat.Png);
 
-            // Create the HTML content
-            string htmlContent = $@"
-    <!DOCTYPE html>
-<html>
+            BodyBuilder builder = new BodyBuilder();
+            // Thêm tệp tạm thời vào MimeEntity
+            MimeEntity mimeEntity = builder.LinkedResources.Add(tempFilePath);
+            mimeEntity.ContentId = MimeUtils.GenerateMessageId();
 
-<head>
-    <meta charset=""utf-8"">
-    <title>TechMath</title>
-    <style>
-        header {{
-            background-color: cyan;
-            text-align: center;
-            border-style: solid;
-            border-width: 20px;
-            border-radius: 25px;
-            border-color: blue;
-        }}
-
-        #pagebody {{
-            width: calc(100% / 2);
-            height: fit-content;
-            background-color: rgb(253, 253, 218);
-            border-style: solid;
-            border-color: black;
-            border-width: 1px;
-            border-radius: 25px;
-            box-shadow: rgb(165, 165, 165) -5px 5px;
-            margin: 10px auto 10px auto;
-            padding: 20px;
-            text-align: center;
-        }}
-
-        #one_third_box {{
-            width: calc(100% / 3 - 25px);
-            height: fit-content;
-            /*border-style: solid;*/
-            margin-left: 25px;
-        }}
-
-        footer {{
-            background-color: rgb(212, 212, 212);
-            text-align: center;
-            padding: 5px;
-            font-family: serif;
-            box-shadow: rgb(165, 165, 165) -5px 5px;
-            border-radius: 5px;
-        }}
-    </style>
-</head>
-
-<body>
-    <header>
-        <p style=""color:rgb(255, 0, 0); font-size: 50px; text-shadow: 4px 4px yellow;""><b>NT106.O22.2</b></p>
-        <p style=""font-size: 25px;"">Thực hành lập trình mạng căn bản</p>
-        <p style=""font-size: 25px;"">Lab 5: Gửi và Nhận Mail trong C#</p>
-    </header>
-
-    <div id=""pagebody"">
-        <h1>LỜI MỜI ĂN CÙNG</h1>
-        <img src='data:image/jpeg;base64,{base64Image}' alt='{monAn}' />
-        <h2>Tên món ăn: </h2>
-        <h3>Giá món ăn: </h3>
-        <h3>Địa chỉ: </h3>
-        <h3>Người đóng góp: </h3>
-        <h3>Mô tả: </h3>
-    </div>
-
-    <footer>
-        <p style=""font-size: 25px;"">Thông tin chi tiết xin liên hệ 22521081@gm.uit.edu.vn</p>
-    </footer>
-</body>
-
-</html>";
-
-            MailMessage mail = new MailMessage();
-            mail.To.Add(to);
-            mail.From = new MailAddress(from);
+            builder.HtmlBody = string.Format(
+                "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "<meta charset=\"UTF-8\">\n" +
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                "<title>UIT - NT106 Lab 6 - Hôm nay ăn gì ?</title>\n" +
+                "<meta name=\"description\" content=\"Lab4\" />\n" +
+                "<meta name=\"keywords\" content=\"Lab4\" />\n" +
+                "</head>\n" +
+                "<body class='pushmenu-push' id=\"page\">\n" +
+                "<div class=\"dialog\" style=\"width:60%;margin:10% auto;text-align:center;\">\n" +
+                "<div class=\"dialogBox\">\n" +
+                "<h4>Bạn có một lời mời đi ăn!</h4>\n" +
+                "<h3>NT106 Lab 6 - Bạn muốn ăn gì ?</h3>\n" +
+                "<img src=\"cid:{0}\" alt=\"Trường Đại học Công nghệ Thông tin\" role=\"presentation\" style=\"max-width:50%; height:fit-content;\">\n" +
+                "<div style=\"color:blue;\">Tên món: {1}</div>\n" +
+                "<div style=\"color:blue;\">Giá: {2}</div>\n" +
+                "<div style=\"color:blue;\">Địa chi: {3}</div>\n" +
+                "<br/>\n" +
+                "<i>Chúc bạn ăn ngon miệng</i>\n" +
+                "</div>\n" +
+                "</div>\n" +
+                "</body>",
+                mimeEntity.ContentId, Name, Gia, DiaChi);
+            MimeMessage mail = new MimeMessage();
+            mail.From.Add(new MailboxAddress("", from));
+            mail.To.Add(new MailboxAddress("", to));
             mail.Subject = "Homnayangi";
-            mail.Body = htmlContent;
-            mail.IsBodyHtml = true; // Set to true to indicate that the body is HTML
 
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
-            smtp.EnableSsl = true;
-            smtp.Port = 587;
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.Credentials = new NetworkCredential(from, pass); // from: gmail of sender, pass: password gmail of sender
+            mail.Body = builder.ToMessageBody();
 
+
+            SmtpClient smtp = new SmtpClient();
+            smtp.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+            smtp.Authenticate(from, pass);
             try
             {
                 smtp.Send(mail);
@@ -146,5 +111,9 @@ namespace Lab04Bai7
             }
         }
 
+        private void receiverTxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

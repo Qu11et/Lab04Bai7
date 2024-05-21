@@ -74,5 +74,11 @@ namespace Lab04Bai7
             Sign_up sign_Up = new Sign_up();
             sign_Up.Show();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            EmailSetting emailSetting = new EmailSetting();
+            emailSetting.ShowDialog();
+        }
     }
 }

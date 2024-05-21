@@ -176,11 +176,13 @@
             // notifyBtn
             // 
             this.notifyBtn.AutoSize = true;
-            this.notifyBtn.Location = new System.Drawing.Point(543, 9);
+            this.notifyBtn.BackColor = System.Drawing.Color.Transparent;
+            this.notifyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notifyBtn.Location = new System.Drawing.Point(433, 9);
             this.notifyBtn.Name = "notifyBtn";
-            this.notifyBtn.Size = new System.Drawing.Size(73, 16);
+            this.notifyBtn.Size = new System.Drawing.Size(158, 16);
             this.notifyBtn.TabIndex = 20;
-            this.notifyBtn.Text = "Notification";
+            this.notifyBtn.Text = "You have 0 invitations";
             this.notifyBtn.Click += new System.EventHandler(this.notifyBtn_Click);
             // 
             // Form1
@@ -203,6 +205,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
